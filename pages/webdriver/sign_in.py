@@ -55,7 +55,7 @@ class SignIn(Base):
     def click_sign_in(self):
         """Clicks the 'Sign In' button."""
         self.selenium.find_element(*self._sign_in_locator).click()
-        self.selenium.switch_to_window('')
+        self.switch_to_main_window()
 
     def click_verify_email(self):
         """Clicks verify email button and wait for success confirmation"""
