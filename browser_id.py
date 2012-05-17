@@ -35,5 +35,5 @@ class BrowserID(object):
             raise Exception("Not yet supported for Selenium RC")
         else:
             from pages.webdriver.sign_in import SignIn
-            sign_in = SignIn(self.selenium, timeout=self.timeout)
-            sign_in.verify_new_user(email)
+        sign_in = SignIn(self.selenium, timeout=self.timeout)
+        sign_in.verify_new_user(email)
