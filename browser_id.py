@@ -37,3 +37,13 @@ class BrowserID(object):
             from pages.webdriver.sign_in import SignIn
         sign_in = SignIn(self.selenium, timeout=self.timeout)
         sign_in.verify_new_user(email)
+
+    def verify_email_address(self, password):
+        """Add a new user via the verify new user workflow."""
+        if self.__is_rc:
+            raise Exception("Not yet supported for Selenium RC")
+        else:
+            from pages.webdriver.verify_email_address import VerifyEmailAddress
+
+        verify_email_address = VerifyEmailAddress(self.selenium, timeout=self.timeout)
+        verify_email_address.enter_passwords_and_verify_account(password)
