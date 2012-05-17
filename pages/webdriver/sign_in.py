@@ -51,8 +51,6 @@ class SignIn(Base):
     def click_next(self):
         """Clicks the 'next' button."""
         self.selenium.find_element(*self._next_locator).click()
-        WebDriverWait(self.selenium, self.timeout).until(
-            lambda s: s.find_element(*self._password_locator).is_displayed())
 
     def click_sign_in(self):
         """Clicks the 'Sign In' button."""
@@ -69,6 +67,8 @@ class SignIn(Base):
         """Signs in using the specified email address and password."""
         self.email = email
         self.click_next()
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: s.find_element(*self._password_locator).is_displayed())
         self.password = password
         self.click_sign_in()
 

@@ -12,11 +12,17 @@ class BrowserID(object):
     def __init__(self, selenium, timeout=60):
         self.selenium = selenium
         self.timeout = timeout
-        self._is_rc = isinstance(self.selenium, selenium.selenium)
+
+    @property
+    def is_rc(self):
+        try:
+            return isinstance(self.selenium, selenium.selenium)
+        except:
+            return False
 
     def sign_in(self, email, password):
         """Signs in using the specified email address and password."""
-        if self._is_rc:
+        if self.is_rc:
             from pages.rc.sign_in import SignIn
         else:
             from pages.webdriver.sign_in import SignIn
@@ -25,7 +31,7 @@ class BrowserID(object):
 
     def verify_new_user(self, email):
         """Add a new user via the verify new user workflow."""
-        if self._is_rc:
+        if self.is_rc:
             raise Exception("Not yet supported for Selenium RC")
         else:
             from pages.webdriver.sign_in import SignIn
