@@ -26,6 +26,21 @@ class TestSignIn:
 
         # BrowserID
         browser_id = BrowserID(sel)
+        browser_id.verify_new_user(self._email)
+
+        sel.implicitly_wait(20)
+        assert sel.find_element_by_css_selector('#loginInfo .login').is_displayed()
+        sel.quit()
+
+    def test_verify_user_in_favorite_beer_using_webdriver(self):
+        sel = webdriver.Firefox()
+        sel.implicitly_wait(10)
+        sel.get('http://myfavoritebeer.org/')
+        sel.find_element_by_css_selector('#loginInfo .login').click()
+        sel.implicitly_wait(0)
+
+        # BrowserID
+        browser_id = BrowserID(sel)
         browser_id.sign_in(self._email, self._password)
 
         sel.implicitly_wait(20)
