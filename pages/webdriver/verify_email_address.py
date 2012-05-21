@@ -53,12 +53,12 @@ class VerifyEmailAddress(Base):
         password.clear()
         password.send_keys(value)
 
-    def click_finish(self, value):
+    def click_finish(self):
         self.selenium.find_element(*self._finish_locator).click()
 
     def enter_passwords_and_verify_account(self, password):
-        self.password(password)
-        self.verify_password(password)
+        self.password = password
+        self.verify_password = password
         self.click_finish()
 
         WebDriverWait(self.selenium, self.timeout).until(
