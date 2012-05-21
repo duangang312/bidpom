@@ -26,6 +26,27 @@ class TestSignIn:
         signin.click_next()
         signin.password = mozwebqa.password
         signin.click_sign_in()
+        signin.switch_to_main_window()
 
         WebDriverWait(mozwebqa.selenium, mozwebqa.timeout).until(
             lambda s: s.find_element_by_id('loggedin').is_displayed())
+
+    def test_sign_in_new_user_helper(self, mozwebqa):
+        from ... import BrowserID
+        browser_id = BrowserID(mozwebqa.selenium, mozwebqa.timeout)
+        browser_id.sign_in_new_user(mozwebqa.email, mozwebqa.password)
+
+        WebDriverWait(mozwebqa.selenium, mozwebqa.timeout).until(
+            lambda s: s.find_element_by_id('loggedout').is_displayed())
+
+    def test_sign_in_new_user(self, mozwebqa):
+        from ...pages.webdriver.sign_in import SignIn
+        signin = SignIn(mozwebqa.selenium, mozwebqa.timeout)
+        signin.email = mozwebqa.email
+        signin.click_next()
+        signin.click_verify_email()
+        signin.close_persona_window()
+        signin.switch_to_main_window()
+
+        WebDriverWait(mozwebqa.selenium, mozwebqa.timeout).until(
+            lambda s: s.find_element_by_id('loggedout').is_displayed())
