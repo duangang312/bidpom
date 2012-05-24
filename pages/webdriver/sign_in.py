@@ -13,6 +13,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 class SignIn(Base):
 
     _email_locator = (By.ID, 'email')
+    _email_label_locator = (By.CSS_SELECTOR, "label[for='email_0']")
     _password_locator = (By.ID, 'password')
     _next_locator = (By.CSS_SELECTOR, 'button.start')
     _sign_in_locator = (By.CSS_SELECTOR, 'button.returning')
@@ -21,8 +22,6 @@ class SignIn(Base):
 
     def __init__(self, *args, **kwargs):
         Base.__init__(self, *args, **kwargs)
-        WebDriverWait(self.selenium, self.timeout).until(
-            lambda s: s.find_element(*self._email_locator).is_displayed())
 
     @property
     def email(self):
@@ -70,6 +69,10 @@ class SignIn(Base):
 
     def sign_in(self, email, password):
         """Signs in using the specified email address and password."""
+
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: s.find_element(*self._email_locator).is_displayed())
+
         self.email = email
         self.click_next()
         self.password = password
@@ -77,6 +80,10 @@ class SignIn(Base):
 
     def sign_in_new_user(self, email):
         """Enter an email address and click Verify Email button """
+
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: s.find_element(*self._email_locator).is_displayed())
+
         self.email = email
         self.click_next()
         self.click_verify_email()
@@ -84,5 +91,11 @@ class SignIn(Base):
         self.switch_to_main_window()
 
     def sign_in_returning_user(self, email):
-        assert self.email == email
+        """Sign in a user who already has an account"""
+
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: s.find_element(*self._sign_in_locator).is_displayed())
+
+        email_label = self.selenium.find_element(*self.email_label_locator)
+        assert email_label.text == email
         self.click_sign_in()
