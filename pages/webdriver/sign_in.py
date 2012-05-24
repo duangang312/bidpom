@@ -17,6 +17,7 @@ class SignIn(Base):
     _password_locator = (By.ID, 'password')
     _next_locator = (By.CSS_SELECTOR, 'button.start')
     _sign_in_locator = (By.CSS_SELECTOR, 'button.returning')
+    _sign_in_returning_user_locator = (By.ID, 'signInButton')
     _verify_email_locator = (By.CSS_SELECTOR, 'button.newuser')
     _content_header_locator = (By.CSS_SELECTOR, 'div.contents h2')
 
@@ -58,6 +59,11 @@ class SignIn(Base):
         self.selenium.find_element(*self._sign_in_locator).click()
         self.switch_to_main_window()
 
+    def click_sign_in_returning_user(self):
+        """Clicks the 'Sign In' button."""
+        self.selenium.find_element(*self._sign_in_returning_user_locator).click()
+        self.switch_to_main_window()
+
     def click_verify_email(self):
         """Clicks verify email button and wait for success confirmation"""
         self.selenium.find_element(*self._verify_email_locator).click()
@@ -94,7 +100,7 @@ class SignIn(Base):
         """Sign in a user who already has an account"""
 
         WebDriverWait(self.selenium, self.timeout).until(
-            lambda s: s.find_element(*self._sign_in_locator).is_displayed())
+            lambda s: s.find_element(*self._sign_in_returning_user_locator).is_displayed())
 
         email_label = self.selenium.find_element(*self.email_label_locator)
         assert email_label.text == email
