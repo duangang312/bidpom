@@ -102,6 +102,6 @@ class SignIn(Base):
         WebDriverWait(self.selenium, self.timeout).until(
             lambda s: s.find_element(*self._sign_in_returning_user_locator).is_displayed())
 
-        email_label = self.selenium.find_element(*self.email_label_locator)
+        email_label = self.selenium.find_element(*self._email_label_locator)
         assert email_label.text == email
         self.click_sign_in()
