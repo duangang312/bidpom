@@ -104,4 +104,4 @@ class SignIn(Base):
 
         email_label = self.selenium.find_element(*self._email_label_locator)
         assert email_label.text == email
-        self.click_sign_in()
+        self.click_sign_in_returning_user()
