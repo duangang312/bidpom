@@ -19,7 +19,7 @@ class SignIn(Base):
     _sign_in_locator = (By.CSS_SELECTOR, 'button.returning')
     _sign_in_returning_user_locator = (By.ID, 'signInButton')
     _verify_email_locator = (By.CSS_SELECTOR, 'button.newuser')
-    _content_header_locator = (By.CSS_SELECTOR, 'div.contents h2')
+    _back_locator = (By.ID, 'back')
 
     def __init__(self, *args, **kwargs):
         Base.__init__(self, *args, **kwargs)
@@ -67,8 +67,9 @@ class SignIn(Base):
     def click_verify_email(self):
         """Clicks verify email button and wait for success confirmation"""
         self.selenium.find_element(*self._verify_email_locator).click()
+        # This may look like an odd thing to wait for but it is safest
         WebDriverWait(self.selenium, self.timeout).until(
-            lambda s: s.find_element(*self._content_header_locator).text == 'Check your email!')
+            lambda s: s.find_element(*self._back_locator).is_displayed())
 
     def close_persona_window(self):
         self.selenium.close()
