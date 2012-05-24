@@ -82,3 +82,7 @@ class SignIn(Base):
         self.click_verify_email()
         self.close_persona_window()
         self.switch_to_main_window()
+
+    def sign_in_returning_user(self, email):
+        assert self.email == email
+        self.click_sign_in()
