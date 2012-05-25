@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import pytest
-import time
+
 from selenium.webdriver.support.ui import WebDriverWait
 
 
@@ -27,6 +27,7 @@ class TestSignIn:
         signin.click_next()
         signin.password = mozwebqa.password
         signin.click_sign_in()
+
         signin.switch_to_main_window()
 
         WebDriverWait(mozwebqa.selenium, mozwebqa.timeout).until(
