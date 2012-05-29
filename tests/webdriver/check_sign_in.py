@@ -86,6 +86,23 @@ class TestSignIn:
         WebDriverWait(mozwebqa.selenium, mozwebqa.timeout).until(
             lambda s: s.find_element_by_id('loggedin').is_displayed())
 
+    def test_email_property_returning_user(self, mozwebqa):
+        self.create_verified_user(mozwebqa.selenium, mozwebqa.timeout)
+        mozwebqa.selenium.get('%s/' % mozwebqa.base_url)
+        WebDriverWait(mozwebqa.selenium, mozwebqa.timeout).until(
+            lambda s: s.find_element_by_id('loggedout').is_displayed())
+        mozwebqa.selenium.find_element_by_id('loggedout'). \
+            find_element_by_tag_name('button').click()
+
+        from ...pages.webdriver.sign_in import SignIn
+        signin = SignIn(mozwebqa.selenium,
+                        mozwebqa.timeout,
+                        expect='returning')
+        # In the absence of the correct email to assert upon I
+        # have used a representative assertion
+        assert '@restmail.net' in signin.email
+        assert signin.email != ''
+
     def create_verified_user(self, selenium, timeout):
         restmail_username = 'bidpom_%s' % uuid.uuid1()
         browser_id = BrowserID(selenium, timeout)
