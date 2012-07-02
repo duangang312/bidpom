@@ -21,10 +21,10 @@ class SignIn(Base):
     _sign_in_locator = (By.CSS_SELECTOR, 'button.returning')
     _sign_in_returning_user_locator = (By.ID, 'signInButton')
     _verify_email_locator = (By.ID, 'verify_user')
-    _use_another_email_address_locator = (By.ID, 'back')
     _add_another_email_locator = (By.ID, 'useNewEmail')
     _new_email_locator = (By.ID, 'newEmail')
     _add_new_email_locator = (By.ID, 'addNewEmail')
+    _check_email_at_locator = (By.CSS_SELECTOR, 'div.contents > p:nth-of-type(1) > strong')
 
     def __init__(self, selenium, timeout, expect='new'):
         Base.__init__(self, selenium, timeout)
@@ -95,6 +95,9 @@ class SignIn(Base):
         checkbox = self.selenium.find_element(By.CSS_SELECTOR, "input[value='%s']" % value)
         checkbox.click()
 
+    def check_email_at_address(self):
+        return self.selenium.find_element(*self._check_email_at_locator).text
+
     @property
     def password(self):
         """Get the value of the password field."""
@@ -149,7 +152,7 @@ class SignIn(Base):
         self.selenium.find_element(*self._verify_email_locator).click()
         WebDriverWait(self.selenium, self.timeout).until(
             lambda s: s.find_element(
-                *self._use_another_email_address_locator).is_displayed())
+                *self._check_email_at_locator).is_displayed())
 
     def click_add_another_email_address(self):
         """Clicks 'add another email' button."""
@@ -163,7 +166,7 @@ class SignIn(Base):
         self.selenium.find_element(*self._add_new_email_locator).click()
         WebDriverWait(self.selenium, self.timeout).until(
             lambda s: s.find_element(
-                *self._use_another_email_address_locator).is_displayed())
+                *self._check_email_at_locator).is_displayed())
 
     def sign_in(self, email, password):
         """Signs in using the specified email address and password."""
