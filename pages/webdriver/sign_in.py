@@ -21,6 +21,8 @@ class SignIn(Base):
     _sign_in_returning_user_locator = (By.ID, 'signInButton')
     _verify_email_locator = (By.ID, 'verify_user')
     _check_email_at_locator = (By.CSS_SELECTOR, 'div.contents > p:nth-of-type(1) > strong')
+    _forgot_password_locator = (By.ID, 'forgotPassword')
+    _reset_password_button_locator = (By.ID, 'password_reset')
 
     def __init__(self, selenium, timeout, expect='new'):
         Base.__init__(self, selenium, timeout)
@@ -124,6 +126,20 @@ class SignIn(Base):
             lambda s: s.find_element(
                 *self._check_email_at_locator).is_displayed())
 
+    def click_forgot_password(self):
+        """Clicks 'forgot password' link (visible after entering a valid email)"""
+        self.selenium.find_element(*self._forgot_password_locator).click()
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: s.find_element(
+                *self._reset_password_button_locator).is_displayed())
+
+    def click_reset_password(self):
+        """Clicks 'reset password' after forgot password and new passwords entered"""
+        self.selenium.find_element(*self._reset_password_button_locator).click()
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: s.find_element(
+                *self._check_email_at_locator).is_displayed())
+
     def sign_in(self, email, password):
         """Signs in using the specified email address and password."""
         self.email = email
@@ -144,3 +160,14 @@ class SignIn(Base):
     def sign_in_returning_user(self):
         """Signs in with the stored user."""
         self.click_sign_in_returning_user()
+
+    def sign_in_reset_password(self, email, new_password):
+        """Enters email, clicks forgot password and enters new password"""
+        self.email = email
+        self.click_next(expect='password')
+        self.click_forgot_password()
+        self.password = new_password
+        self.verify_password = new_password
+        self.click_reset_password()
+        self.close_window()
+        self.switch_to_main_window()
