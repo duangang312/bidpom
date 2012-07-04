@@ -9,6 +9,7 @@ from base import Base
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
+import time
 
 class SignIn(Base):
 
@@ -45,6 +46,7 @@ class SignIn(Base):
             WebDriverWait(self.selenium, self.timeout).until(
                 lambda s: s.find_element(
                     *self._sign_in_returning_user_locator).is_displayed())
+            time.sleep(2)
         else:
             raise Exception('Unknown expect value: %s' % expect)
 
