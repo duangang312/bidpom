@@ -12,6 +12,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 class SignIn(Base):
 
+    _page_title = 'Mozilla Persona'
+
     _signed_in_email_locator = (By.CSS_SELECTOR, 'label[for=email_0]')
     _email_locator = (By.ID, 'email')
     _password_locator = (By.ID, 'password')
@@ -23,6 +25,7 @@ class SignIn(Base):
     _check_email_at_locator = (By.CSS_SELECTOR, 'div.contents > p:nth-of-type(1) > strong')
     _forgot_password_locator = (By.ID, 'forgotPassword')
     _reset_password_button_locator = (By.ID, 'password_reset')
+    _check_email_at_locator = (By.CSS_SELECTOR, '#wait .contents h2 + p strong')
 
     def __init__(self, selenium, timeout, expect='new'):
         Base.__init__(self, selenium, timeout)
@@ -30,8 +33,7 @@ class SignIn(Base):
         if self.selenium.title != self._page_title:
             for handle in self.selenium.window_handles:
                 self.selenium.switch_to_window(handle)
-                WebDriverWait(self.selenium, self.timeout).until(lambda s: s.title)
-                if self.selenium.title == self._page_title:
+                if self.selenium.execute_script('return window.BrowserID'):
                     break
             else:
                 raise Exception('Popup has not loaded')
@@ -93,6 +95,11 @@ class SignIn(Base):
         password = self.selenium.find_element(*self._verify_password_locator)
         password.clear()
         password.send_keys(value)
+
+    @property
+    def check_email_at_address(self):
+        """Get the value of the email address for confirmation."""
+        return self.selenium.find_element(*self._check_email_at_locator).text
 
     def click_next(self, expect='password'):
         """Clicks the 'next' button."""
@@ -160,14 +167,3 @@ class SignIn(Base):
     def sign_in_returning_user(self):
         """Signs in with the stored user."""
         self.click_sign_in_returning_user()
-
-    def sign_in_reset_password(self, email, new_password):
-        """Enters email, clicks forgot password and enters new password"""
-        self.email = email
-        self.click_next(expect='password')
-        self.click_forgot_password()
-        self.password = new_password
-        self.verify_password = new_password
-        self.click_reset_password()
-        self.close_window()
-        self.switch_to_main_window()

@@ -61,6 +61,8 @@ class TestSignIn(BaseTest):
         signin.password = password
         signin.verify_password = password
         signin.click_verify_email()
+        assert signin.check_email_at_address == email
+
         signin.close_window()
         signin.switch_to_main_window()
         mail = restmail.get_mail(restmail_username)
