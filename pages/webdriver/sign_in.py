@@ -12,6 +12,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 class SignIn(Base):
 
+    _page_title = 'Mozilla Persona'
+
     _signed_in_email_locator = (By.CSS_SELECTOR, 'label[for=email_0]')
     _email_locator = (By.ID, 'email')
     _password_locator = (By.ID, 'password')
@@ -28,8 +30,7 @@ class SignIn(Base):
         if self.selenium.title != self._page_title:
             for handle in self.selenium.window_handles:
                 self.selenium.switch_to_window(handle)
-                WebDriverWait(self.selenium, self.timeout).until(lambda s: s.title)
-                if self.selenium.title == self._page_title:
+                if self.selenium.execute_script('return window.BrowserID'):
                     break
             else:
                 raise Exception('Popup has not loaded')
