@@ -12,6 +12,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 class SignIn(Base):
 
+    _page_title = 'Mozilla Persona: A Better Way to Sign In'
+
     _signed_in_email_locator = (By.CSS_SELECTOR, 'label[for=email_0]')
     _email_locator = (By.ID, 'email')
     _password_locator = (By.ID, 'password')
