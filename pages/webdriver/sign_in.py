@@ -22,10 +22,11 @@ class SignIn(Base):
     _sign_in_locator = (By.CSS_SELECTOR, 'button.returning')
     _sign_in_returning_user_locator = (By.ID, 'signInButton')
     _verify_email_locator = (By.ID, 'verify_user')
-    _check_email_at_locator = (By.CSS_SELECTOR, 'div.contents > p:nth-of-type(1) > strong')
     _forgot_password_locator = (By.ID, 'forgotPassword')
-    _reset_password_button_locator = (By.ID, 'password_reset')
+    _reset_password_locator = (By.ID, 'password_reset')
     _check_email_at_locator = (By.CSS_SELECTOR, '#wait .contents h2 + p strong')
+    _use_another_email_address_locator = (By.ID, 'back')
+    _forgot_password_locator = (By.ID, 'forgotPassword')
 
     def __init__(self, selenium, timeout, expect='new'):
         Base.__init__(self, selenium, timeout)
@@ -138,14 +139,28 @@ class SignIn(Base):
         self.selenium.find_element(*self._forgot_password_locator).click()
         WebDriverWait(self.selenium, self.timeout).until(
             lambda s: s.find_element(
-                *self._reset_password_button_locator).is_displayed())
+                *self._reset_password_locator).is_displayed())
 
     def click_reset_password(self):
         """Clicks 'reset password' after forgot password and new passwords entered"""
-        self.selenium.find_element(*self._reset_password_button_locator).click()
+        self.selenium.find_element(*self._reset_password_locator).click()
         WebDriverWait(self.selenium, self.timeout).until(
             lambda s: s.find_element(
                 *self._check_email_at_locator).is_displayed())
+
+    def click_forgot_password(self):
+        """Clicks 'forgot password' link (visible after entering a valid email)"""
+        self.selenium.find_element(*self._forgot_password_locator).click()
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: s.find_element(
+                *self._reset_password_locator).is_displayed())
+
+    def click_reset_password(self):
+        """Clicks 'reset password' after forgot password and new passwords entered"""
+        self.selenium.find_element(*self._reset_password_locator).click()
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: s.find_element(
+                *self._use_another_email_address_locator).is_displayed())
 
     def sign_in(self, email, password):
         """Signs in using the specified email address and password."""
