@@ -16,3 +16,6 @@ class Base(object):
 
     def switch_to_main_window(self):
         self.selenium.switch_to_window(self._main_window_handle)
+
+    def clear_local_storage(self):
+        self.selenium.execute_script('localStorage.clear()')
